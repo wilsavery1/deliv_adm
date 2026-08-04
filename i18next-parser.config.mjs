@@ -13,7 +13,7 @@
  *   npm run i18n:watch          # continuous
  */
 export default {
-    locales: ['en', 'ar', 'fr'],
+    locales: ['en', 'es'],
     output: 'Modules/Builder/resources/js/locales/$LOCALE.json',
     input: [
         'Modules/Builder/resources/js/**/*.{js,jsx}',
