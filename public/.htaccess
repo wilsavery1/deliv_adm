@@ -9,6 +9,13 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Legacy "public/" asset prefix.
+    # The app hardcodes asset URLs as asset('public/assets/...'), which is
+    # written for a project-root DocumentRoot. Since the DocumentRoot here is
+    # public/, strip the leading "public/" so /public/assets/x resolves to the
+    # real file at public/assets/x instead of 404ing on public/public/assets/x.
+    RewriteRule ^public/(.+)$ $1 [L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
