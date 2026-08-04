@@ -131,6 +131,21 @@ class InstallController extends Controller
         $newRouteServiceProvier = base_path('app/Providers/RouteServiceProvider.txt');
         copy($newRouteServiceProvier, $previousRouteServiceProvier);
 
+        // The copy above swaps the installer's RouteServiceProvider for the
+        // live one (installer routes -> real admin/web/api routes). That swap
+        // only takes effect once any cached routes/config are dropped and the
+        // opcode cache is refreshed. Otherwise the app keeps serving the
+        // installer, and every post-install URL (e.g. /login/...) falls
+        // through the installer's fallback back to "/", looping the wizard.
+        try {
+            Artisan::call('optimize:clear');
+        } catch (\Exception $exception) {
+            info($exception);
+        }
+        if (function_exists('opcache_reset')) {
+            @opcache_reset();
+        }
+
         Helpers::remove_dir('storage/app/public');
         Storage::disk('public')->makeDirectory('/');
 
