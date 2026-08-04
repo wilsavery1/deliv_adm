@@ -1020,6 +1020,7 @@ const COUNTIRES = [
         'NP' => 'Nepal',
         'NL' => 'Netherlands',
         'NZ' => 'New Zealand',
+        'NI' => 'Nicaragua',
         'NG' => 'Nigeria',
         'NO' => 'Norway',
         'OM' => 'Oman',
