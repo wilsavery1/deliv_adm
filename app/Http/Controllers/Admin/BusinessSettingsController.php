@@ -630,7 +630,7 @@ class BusinessSettingsController extends Controller
             }
         }
         $data_values = Setting::whereIn('settings_type', ['payment_config'])
-            ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paytabs', 'paystack', 'paymob_accept', 'paytm', 'flutterwave', 'liqpay', 'bkash', 'mercadopago'])
+            ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paytabs', 'paystack', 'paymob_accept', 'paytm', 'flutterwave', 'liqpay', 'bkash', 'mercadopago', 'pagadito'])
             ->when($request->has('search'), function ($query) use ($request) {
                 $query->where('key_name', 'like', "%{$request->search}%");
             })
@@ -700,7 +700,7 @@ class BusinessSettingsController extends Controller
         $request['status'] = $request->status ?? 0;
 
         $validation = [
-            'gateway' => 'required|in:ssl_commerz,paypal,stripe,razor_pay,senang_pay,paytabs,paystack,paymob_accept,paytm,flutterwave,liqpay,bkash,mercadopago',
+            'gateway' => 'required|in:ssl_commerz,paypal,stripe,razor_pay,senang_pay,paytabs,paystack,paymob_accept,paytm,flutterwave,liqpay,bkash,mercadopago,pagadito',
             'mode' => 'required|in:live,test',
         ];
 

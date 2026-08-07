@@ -1029,7 +1029,7 @@ class CheckoutProvider implements CheckoutProviderContract
     private const DIGITAL_GATEWAYS = [
         'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paystack',
         'flutterwave', 'ssl_commerz', 'paytabs', 'paytm', 'paymob_accept',
-        'liqpay', 'bkash', 'mercadopago',
+        'liqpay', 'bkash', 'mercadopago', 'pagadito',
     ];
 
     private function isDigitalGateway(?string $key): bool
