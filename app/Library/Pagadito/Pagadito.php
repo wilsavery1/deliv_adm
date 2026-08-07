@@ -36,6 +36,7 @@ class Pagadito
     private $custom_params;
     private $currency;
     private $allow_pending_payments;
+    private $last_raw_response;
 
     //***********************************  Funciones Públicas
 
@@ -132,6 +133,20 @@ class Pagadito
             if ($this->get_rs_code() == "PG1002") {
                 return urldecode($this->get_rs_value());
             }
+            \Illuminate\Support\Facades\Log::error('Pagadito exec_trans payload rejected.', [
+                'sent' => [
+                    'ern' => $ern,
+                    'amount' => $params['amount'],
+                    'currency' => $params['currency'],
+                    'details' => $params['details'],
+                    'custom_params' => $params['custom_params'],
+                    'allow_pending_payments' => $params['allow_pending_payments'],
+                    'format_return' => $params['format_return'],
+                ],
+                'rs_code' => $this->get_rs_code(),
+                'rs_message' => $this->get_rs_message(),
+                'raw_response' => $this->last_raw_response,
+            ]);
         }
         return false;
     }
@@ -494,6 +509,7 @@ class Pagadito
             curl_setopt($ch, CURLOPT_POSTFIELDS, $this->format_post_vars($params));
             $response = curl_exec($ch);
             curl_close($ch);
+            $this->last_raw_response = $response;
             return $this->decode_response($response);
         } catch (\Exception $err) {
             return null;
