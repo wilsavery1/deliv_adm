@@ -12,6 +12,7 @@ use App\Http\Controllers\SenangPayController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\BkashPaymentController;
 use App\Http\Controllers\FlutterwaveV3Controller;
+use App\Http\Controllers\PagaditoController;
 use App\Http\Controllers\PaypalPaymentController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\SslCommerzPaymentController;
@@ -180,6 +181,13 @@ if (!$is_published) {
             Route::get('pay', [MercadoPagoController::class, 'index'])->name('index');
             Route::post('make-payment', [MercadoPagoController::class, 'make_payment'])->name('make_payment')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);;
             Route::any('callback', [MercadoPagoController::class, 'callback'])->name('callback')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);;
+        });
+
+        //PAGADITO
+        Route::group(['prefix' => 'pagadito', 'as' => 'pagadito.'], function () {
+            Route::get('pay', [PagaditoController::class, 'pay'])->name('pay');
+            Route::any('callback', [PagaditoController::class, 'callback'])->name('callback')
+                ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
         });
 
         //PAYMOB

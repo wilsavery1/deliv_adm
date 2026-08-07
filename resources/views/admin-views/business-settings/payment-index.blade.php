@@ -394,6 +394,13 @@
                                                             <input id="Callback_Url" type="text" class="form-control" placeholder="{{translate('Callback Url')}} *" readonly value="{{env('APP_ENV')=='demo'?'': route('paystack.callback')}}">
                                                         </div>
                                                     @endif
+
+                                                    @if($payment['key_name'] == 'pagadito')
+                                                        <div class="form-floating mb-20">
+                                                            <label for="Pagadito_Return_Url" class="form-label">{{translate('Return Url')}}</label>
+                                                            <input id="Pagadito_Return_Url" type="text" class="form-control" placeholder="{{translate('Return Url')}} *" readonly value="{{env('APP_ENV')=='demo'?'': route('pagadito.callback')}}">
+                                                        </div>
+                                                    @endif
                                                     
                                                     @php($supportedCountry = $payment->live_values)
                                                     @if ( $payment['key_name'] == 'mercadopago')

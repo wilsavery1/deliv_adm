@@ -125,6 +125,15 @@ trait PaymentGatewayTrait
                 "HTG" => "Haitian Gourde",
                 "USD" => "United States Dollar"
             ],
+            "pagadito" => [
+                "USD" => "United States Dollar",
+                "GTQ" => "Guatemalan Quetzal",
+                "HNL" => "Honduran Lempira",
+                "NIO" => "Nicaraguan Córdoba",
+                "CRC" => "Costa Rican Colón",
+                "PAB" => "Panamanian Balboa",
+                "DOP" => "Dominican Peso"
+            ],
             "payfast" => [
                 "ZAR" => "South African Rand",
                 "USD" => "United States Dollar",
