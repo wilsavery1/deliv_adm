@@ -921,6 +921,20 @@ class BusinessSettingsController extends Controller
                 'username.required_if' => translate('Username is required when payment status is ON'),
                 'password.required_if' => translate('Password is required when payment status is ON'),
             ];
+        } elseif ($request['gateway'] == 'pagadito') {
+            $additional_data = [
+                'gateway_image' => $validator_image_rule . '|image|max:' . $maxFileSizeInMB . '|mimes:' . IMAGE_FORMAT_FOR_VALIDATION,
+                'status' => 'required|in:1,0',
+                'uid' => 'required_if:status,1',
+                'wsk' => 'required_if:status,1',
+            ];
+            $validation_messages = [
+                'gateway_image.required' => translate('Gateway image is required'),
+                'gateway_image.max' => translate('Gateway image size should not be greater than ' . $maxFileSizeInMB . 'MB'),
+                'gateway_image.mimes' => translate('Gateway image must be a ' . IMAGE_FORMAT_FOR_VALIDATION),
+                'uid.required_if' => translate('UID is required when payment status is ON'),
+                'wsk.required_if' => translate('WSK is required when payment status is ON'),
+            ];
         }
 
         $request->validate(array_merge($validation, $additional_data), $validation_messages);
