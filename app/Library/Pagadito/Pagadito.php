@@ -548,7 +548,9 @@ class Pagadito
         foreach ($this->details as $detail) {
             $amount += $detail["quantity"] * $detail["price"];
         }
-        return $amount;
+        // Pagadito requires the amount in strict 0.00 (2-decimal) format;
+        // a raw float such as 285.0 serializes as "285" and is rejected (PG2002).
+        return number_format($amount, 2, '.', '');
     }
 
     /**
