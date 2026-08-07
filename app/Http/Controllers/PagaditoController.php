@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PagaditoController extends Controller
@@ -49,9 +50,17 @@ class PagaditoController extends Controller
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
         }
 
+        if (empty($this->config) || empty($this->config->uid) || empty($this->config->wsk)) {
+            Log::error('Pagadito: missing credentials (uid/wsk) in payment config.', [
+                'payment_id' => $data->id,
+            ]);
+            return $this->payment_failed($data);
+        }
+
+        $sandbox = (($this->config->mode ?? 'test') !== 'live');
         $pagadito = new Pagadito($this->config->uid, $this->config->wsk);
         // 'test' credentials run against the Pagadito sandbox endpoint
-        if (($this->config->mode ?? 'test') !== 'live') {
+        if ($sandbox) {
             $pagadito->mode_sandbox_on();
         }
         $pagadito->change_format_json();
@@ -64,12 +73,26 @@ class PagaditoController extends Controller
         $pagadito->set_custom_param('payment_id', $data->id);
 
         if (!$pagadito->connect()) {
+            Log::error('Pagadito connect() failed.', [
+                'sandbox' => $sandbox,
+                'rs_code' => $pagadito->get_rs_code(),
+                'rs_message' => $pagadito->get_rs_message(),
+                'payment_id' => $data->id,
+            ]);
             return $this->payment_failed($data);
         }
 
         // ERN = our PaymentRequest UUID -> returned as reference on get_status()
         $url = $pagadito->exec_trans_url($data->id);
         if ($url === false) {
+            Log::error('Pagadito exec_trans() failed.', [
+                'sandbox' => $sandbox,
+                'rs_code' => $pagadito->get_rs_code(),
+                'rs_message' => $pagadito->get_rs_message(),
+                'ern' => $data->id,
+                'amount' => (float)$data->payment_amount,
+                'currency' => $data->currency_code,
+            ]);
             return $this->payment_failed($data);
         }
 
@@ -103,9 +126,19 @@ class PagaditoController extends Controller
                 return $this->payment_response($data, 'success');
             }
 
+            Log::warning('Pagadito callback: transaction not completed.', [
+                'token' => $token,
+                'reference' => $payment_id,
+                'rs_status' => $pagadito->get_rs_status(),
+            ]);
             return $this->payment_failed($data);
         }
 
+        Log::error('Pagadito callback: unable to verify transaction status.', [
+            'token' => $token,
+            'rs_code' => $pagadito->get_rs_code(),
+            'rs_message' => $pagadito->get_rs_message(),
+        ]);
         return $this->payment_failed(null);
     }
 
