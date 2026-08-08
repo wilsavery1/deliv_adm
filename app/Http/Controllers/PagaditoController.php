@@ -69,9 +69,6 @@ class PagaditoController extends Controller
         // Pagadito derives the charge amount from the sum of details (quantity * price)
         $pagadito->add_detail(1, 'Order #' . $data->attribute_id, (float)$data->payment_amount);
 
-        // Carry our payment id so the callback can recover it defensively
-        $pagadito->set_custom_param('payment_id', $data->id);
-
         if (!$pagadito->connect()) {
             Log::error('Pagadito connect() failed.', [
                 'sandbox' => $sandbox,
@@ -101,7 +98,10 @@ class PagaditoController extends Controller
 
     public function callback(Request $request): Application|JsonResponse|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
-        $token = $request->input('token'); // token_trans appended by Pagadito return URL
+        // Pagadito replaces {value} with the transaction token and {ern_value}
+        // with our ERN (= payment id) in the return URL configured in the panel.
+        $token = $request->input('token');
+        $payment_id = $request->input('ern');
 
         $pagadito = new Pagadito($this->config->uid, $this->config->wsk);
         if (($this->config->mode ?? 'test') !== 'live') {
@@ -109,15 +109,14 @@ class PagaditoController extends Controller
         }
         $pagadito->change_format_json();
 
-        if ($token && $pagadito->connect() && $pagadito->get_status($token)) {
-            $payment_id = $pagadito->get_rs_reference(); // the ERN we sent = payment_id
-            $data = $this->payment::where(['id' => $payment_id])->first();
+        $data = $payment_id ? $this->payment::where(['id' => $payment_id])->first() : null;
 
+        if ($token && $pagadito->connect() && $pagadito->get_status($token)) {
             if (isset($data) && $pagadito->get_rs_status() === 'COMPLETED') {
                 $this->payment::where(['id' => $data->id])->update([
                     'payment_method' => 'pagadito',
                     'is_paid' => 1,
-                    'transaction_id' => $token,
+                    'transaction_id' => $pagadito->get_rs_reference() ?: $token,
                 ]);
                 $data = $this->payment::where(['id' => $data->id])->first();
                 if (function_exists($data->success_hook)) {

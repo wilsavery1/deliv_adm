@@ -397,8 +397,8 @@
 
                                                     @if($payment['key_name'] == 'pagadito')
                                                         <div class="form-floating mb-20">
-                                                            <label for="Pagadito_Return_Url" class="form-label">{{translate('Return Url')}}</label>
-                                                            <input id="Pagadito_Return_Url" type="text" class="form-control" placeholder="{{translate('Return Url')}} *" readonly value="{{env('APP_ENV')=='demo'?'': route('pagadito.callback')}}">
+                                                            <label for="Pagadito_Return_Url" class="form-label">{{translate('Return Url')}} ({{translate('set this in your Pagadito panel')}})</label>
+                                                            <input id="Pagadito_Return_Url" type="text" class="form-control" placeholder="{{translate('Return Url')}} *" readonly value="{{env('APP_ENV')=='demo'?'': route('pagadito.callback').'?token={value}&ern={ern_value}'}}">
                                                         </div>
                                                     @endif
                                                     
