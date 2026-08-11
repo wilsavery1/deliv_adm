@@ -486,6 +486,8 @@ class CustomerAuthController extends Controller
             $ref_by = $referar_user->id;
         }
 
+        DB::beginTransaction();
+
         $user = User::create([
             'f_name' => $firstName,
             'l_name' => $lastName,
@@ -511,6 +513,7 @@ class CustomerAuthController extends Controller
                 $verification_data= DB::table('phone_verifications')->where('phone', $request['phone'])->where(self::HOST_SCOPE)->first();
 
                 if(isset($verification_data) &&  Carbon::parse($verification_data->updated_at)->DiffInSeconds() < $otp_interval_time){
+                    DB::rollBack();
                     $time= round($otp_interval_time - Carbon::parse($verification_data->updated_at)->DiffInSeconds());
                     $errors = [];
                     array_push($errors, ['code' => 'otp', 'message' =>  translate('messages.please_try_again_after_').$time.' '.translate('messages.seconds')]);
@@ -547,6 +550,7 @@ class CustomerAuthController extends Controller
 
                 $token = null;
                 if(getEnvMode() != 'test' && $response !== 'success') {
+                    DB::rollBack();
                     $errors = [];
                     array_push($errors, ['code' => 'otp', 'message' => translate('messages.failed_to_send_sms')]);
                     return response()->json([
@@ -582,6 +586,7 @@ class CustomerAuthController extends Controller
             }
             $token = null;
             if(getEnvMode() != 'test' && $mailResponse !== 'success') {
+                DB::rollBack();
                 $errors = [];
                 array_push($errors, ['code' => 'otp', 'message' => translate('messages.failed_to_send_mail')]);
                 return response()->json([
@@ -590,6 +595,7 @@ class CustomerAuthController extends Controller
             }
         }
 
+        DB::commit();
 
         try
         {
