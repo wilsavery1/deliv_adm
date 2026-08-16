@@ -13,6 +13,7 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\BkashPaymentController;
 use App\Http\Controllers\FlutterwaveV3Controller;
 use App\Http\Controllers\PagaditoController;
+use App\Http\Controllers\PowerTranzController;
 use App\Http\Controllers\PaypalPaymentController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\SslCommerzPaymentController;
@@ -187,6 +188,13 @@ if (!$is_published) {
         Route::group(['prefix' => 'pagadito', 'as' => 'pagadito.'], function () {
             Route::get('pay', [PagaditoController::class, 'pay'])->name('pay');
             Route::any('callback', [PagaditoController::class, 'callback'])->name('callback')
+                ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+        });
+
+        //POWERTRANZ
+        Route::group(['prefix' => 'powertranz', 'as' => 'powertranz.'], function () {
+            Route::get('pay', [PowerTranzController::class, 'pay'])->name('pay');
+            Route::any('callback', [PowerTranzController::class, 'callback'])->name('callback')
                 ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
         });
 

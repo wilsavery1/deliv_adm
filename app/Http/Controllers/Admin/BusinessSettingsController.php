@@ -96,7 +96,7 @@ class BusinessSettingsController extends Controller
 
         case 'payment':
             $digital_payment_methods_count = Setting::whereIn('settings_type', ['payment_config'])
-                ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paytabs', 'paystack', 'paymob_accept', 'paytm', 'flutterwave', 'liqpay', 'bkash', 'mercadopago', 'pagadito'])
+                ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paytabs', 'paystack', 'paymob_accept', 'paytm', 'flutterwave', 'liqpay', 'bkash', 'mercadopago', 'pagadito', 'power_tranz'])
                 ->where('is_active', 1)
                 ->count();
             $offline_payment_methods_count = \App\Models\OfflinePaymentMethod::where('status', 1)->count();
@@ -630,7 +630,7 @@ class BusinessSettingsController extends Controller
             }
         }
         $data_values = Setting::whereIn('settings_type', ['payment_config'])
-            ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paytabs', 'paystack', 'paymob_accept', 'paytm', 'flutterwave', 'liqpay', 'bkash', 'mercadopago', 'pagadito'])
+            ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paytabs', 'paystack', 'paymob_accept', 'paytm', 'flutterwave', 'liqpay', 'bkash', 'mercadopago', 'pagadito', 'power_tranz'])
             ->when($request->has('search'), function ($query) use ($request) {
                 $query->where('key_name', 'like', "%{$request->search}%");
             })

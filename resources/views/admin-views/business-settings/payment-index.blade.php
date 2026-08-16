@@ -401,6 +401,13 @@
                                                             <input id="Pagadito_Return_Url" type="text" class="form-control" placeholder="{{translate('Return Url')}} *" readonly value="{{env('APP_ENV')=='demo'?'': route('pagadito.callback').'?token={value}&ern={ern_value}'}}">
                                                         </div>
                                                     @endif
+
+                                                    @if($payment['key_name'] == 'power_tranz')
+                                                        <div class="form-floating mb-20">
+                                                            <label for="PowerTranz_Callback_Url" class="form-label">{{translate('Merchant Response Url')}}</label>
+                                                            <input id="PowerTranz_Callback_Url" type="text" class="form-control" placeholder="{{translate('Merchant Response Url')}} *" readonly value="{{env('APP_ENV')=='demo'?'': route('powertranz.callback')}}">
+                                                        </div>
+                                                    @endif
                                                     
                                                     @php($supportedCountry = $payment->live_values)
                                                     @if ( $payment['key_name'] == 'mercadopago')

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bad2faf2a72677bf4344676d4e2814f1",
+    "content-hash": "925359ccc790673c780be67852b855e5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6255,6 +6255,83 @@
                 "source": "https://github.com/nette/utils/tree/v4.1.4"
             },
             "time": "2026-05-11T20:49:54+00:00"
+        },
+        {
+            "name": "nexvia-llc/powertranz-sdk",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nexvia-LLC/powertranz-sdk.git",
+                "reference": "826a21327e5be1a438bfd45ab39727c7247aeb24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nexvia-LLC/powertranz-sdk/zipball/826a21327e5be1a438bfd45ab39727c7247aeb24",
+                "reference": "826a21327e5be1a438bfd45ab39727c7247aeb24",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.5",
+                "php": "^8.1",
+                "psr/log": "^3.0|^2.0",
+                "ramsey/uuid": "^4.7"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "phpunit/phpunit": "^10.0"
+            },
+            "suggest": {
+                "illuminate/support": "Required for Laravel integration (^10.0|^11.0|^12.0)."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "PowerTranz": "PowerTranz\\Laravel\\Facades\\PowerTranz"
+                    },
+                    "providers": [
+                        "PowerTranz\\Laravel\\PowerTranzServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PowerTranz\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Zachary Clarke",
+                    "email": "zacharyclarke4912@yahoo.com",
+                    "role": "Lead Engineer"
+                }
+            ],
+            "description": "Production-grade PHP SDK for the PowerTranz payment gateway. Full request/response field coverage, SPI 3DS, HPP, fraud check, recurring, BrowserInfo, and the full transaction lifecycle (auth, capture, refund, void, lookup, search).",
+            "homepage": "https://github.com/Nexvia-LLC/powertranz-sdk",
+            "keywords": [
+                "3ds",
+                "HPP",
+                "caribbean",
+                "fraud-check",
+                "gateway",
+                "payment",
+                "powertranz",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/Nexvia-LLC/powertranz-sdk/issues",
+                "source": "https://github.com/Nexvia-LLC/powertranz-sdk"
+            },
+            "time": "2026-05-03T22:31:07+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -15028,5 +15105,5 @@
     "platform-overrides": {
         "php": "8.3.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

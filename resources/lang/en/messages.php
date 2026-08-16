@@ -1888,6 +1888,7 @@
   'senang_pay' => 'Senang pay',
   'mercadopago' => 'Mercadopago',
   'pagadito' => 'Pagadito',
+  'power_tranz' => 'PowerTranz',
   'paymob_accept' => 'Paymob accept',
   'callback' => 'Callback',
   'bkash' => 'Bkash',
